@@ -41,6 +41,9 @@ flask_session/
 *.dump
 *.pgsql
 postgres_data/
+!schema/
+!schema/*.sql
+
 
 # Environment variables
 .env
