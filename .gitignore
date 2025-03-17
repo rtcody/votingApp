@@ -1,0 +1,81 @@
+# Python / Flask
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.egg/
+MANIFEST
+
+# Flask
+instance/
+.webassets-cache
+flask_session/
+
+# PostgreSQL
+*.sql
+*.dump
+*.pgsql
+postgres_data/
+
+# Environment variables
+.env
+.flaskenv
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.sublime-project
+.sublime-workspace
+
+# Static files (if using a build tool)
+node_modules/
+bower_components/
+
+# Local development settings
+local_settings.py
+db.sqlite3
+
+# Compiled CSS (if you're using a CSS preprocessor)
+*.css.map
+*.sass.map
+*.scss.map
+.sass-cache/
+
+# Production files
+/static/
+/media/
