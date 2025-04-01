@@ -13,7 +13,8 @@ services:
       - "5433:5432"   # Host port 5433 mapped to container port 5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./schema:/docker-entrypoint-initdb.d  # Mount the schema folder with your SQL file
+      - ./schema:/docker-entrypoint-initdb.d  # Mount schema folder for initial scripts
 
 volumes:
   postgres_data:
+    driver: local 
