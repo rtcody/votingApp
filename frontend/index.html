@@ -3,12 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VotingApp</title>
+    <title>Votify</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+      <style>
+        body{
+            background:url(landingPageBG.jpg);
+            background-size: cover;
+            margin: 0;
+            
+        }
+        .button-container{
+
+            display:flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 30px;
+            position: absolute;
+            left: 1300px;
+            top: 10px
+            
+        }
+        
+        button {
+            
+            padding: 10px 15px;
+            font-size: 15px;
+            background-color: black;
+            color: white;
+            border:none;
+            border-radius: 20px;
+            cursor: pointer;
+     
+            
+            
+        }
+
+        button:hover {
+            background-color: darkgrey;
+        }
+
+        .container {
+            text-align: left;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-family: 'garamond', serif;
+            font-size: 30px;
+            font-variant-caps: all-petite-caps;
+
+        }
+
+        .leftMsg {
+            text-align: left;
+            padding: 20px;
+            background: none;     
+            position: absolute;
+            left: 130px;
+            top: 350px;
+            font-family:'Times New Roman', Times, serif;
+            font-size: 30px;
+            font-variant-caps: all-petite-caps;
+            line-height: .25;
+            opacity: .1;
+            transition: 1s ease-in;
+
+        }
+
+        .leftMsg:hover{
+            opacity: 1;
+            transform:scale(1.4)
+        }
+
+        .rightMsg {
+            text-align: left;
+            padding: 20px;
+            background: none;     
+            position: absolute;
+            left: 1150px;
+            top: 350px;
+            font-family:'Times New Roman', Times, serif;
+            font-size: 30px;
+            font-variant-caps: all-petite-caps;
+            line-height: .25;
+            opacity: .1;
+            transition: 1s ease-in;
+           
+
+        }
+
+        .rightMsg:hover{
+            opacity: 1;
+            transform:scale(1.4)
+            
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to the Frontend of our voting app</h1>
+        <h1>Votify</h1>
+    </div>
+
+    <div class="leftMsg">
+        <h2>Cast</h2>
+        <h2>Votes</h2> 
+    </div>
+
+    <div class="rightMsg">
+        <h2>Create</h2>
+        <h2>Polls</h2>
+    </div>
+
+    <div class ="button-container">
+         <button>
+            <a href = "loginPage.html" style="text-decoration:none; color:inherit"> Login
+        </button>
+
+        <button>
+            <a href = "signUpPage.html" style="text-decoration:none; color:inherit"> Sign Up
+            </a>
+        </button>
     </div>
 </body>
 </html>
