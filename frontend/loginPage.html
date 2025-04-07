@@ -19,7 +19,7 @@
 
         }
 
-        .emailBox{
+        .usernameBox{
             position: absolute;
             left: 650px;
             border-radius: 10px;
@@ -34,6 +34,8 @@
             border-radius: 10px;
             border-width: 10px;
             border-color:lightcyan;
+            
+            
 
         }
         .noLogin{
@@ -41,16 +43,31 @@
             font-family:'Times New Roman', Times, serif;
             font-size: 10px;
             position: absolute;
-            left: 620px;
+            left: 630px;
             top: 500px;
         }
 
         .loginButton{
             text-align: center;
             position: absolute;
-            left: 700px;
-            top: 400px;
+            left: 680px;
+            top: 300px;
             padding: 15px 30px;
+            font-size: 15px;
+            background-color: black;
+            color: white;
+            border:none;
+            border-radius: 20px;
+            cursor: pointer;
+
+        }
+
+        .smallSignupButton{
+            text-align: center;
+            position: absolute;
+            left: 690px;
+            top: 550px;
+            padding: 7px 15px;
             font-size: 15px;
             background-color: black;
             color: white;
@@ -66,14 +83,22 @@
         <h1>Welcome Back!</h1>
     </div>
 
-    <input type="text" class="emailBox" placeholder="Enter Email: ">
+    <input type="text" class="usernameBox" placeholder="Enter Username: ">
 
-    <input type="text" class="passwordBox" placeholder="Enter Password: ">
+    <input type="password" class="passwordBox" placeholder="Enter Password: ">
 
     <div class="noLogin">
         <h2>Have not made an account yet?</h2>
     </div>
 
-    <button class ="loginButton"> Log In </button>
+    <button class="loginButton">
+         <a href = "homePage.html" style="text-decoration:none; color:inherit"> Login </a>
+    </button>
+
+
+    <button class ="smallSignupButton">    
+         <a href = "signUpPage.html" style="text-decoration:none; color:inherit"> Sign up </a>
+     </button>
+
 </body>
 </html>

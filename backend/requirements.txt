@@ -1,0 +1,3 @@
+flask 
+flask-sqlalchemy
+pyscog2[binary]
