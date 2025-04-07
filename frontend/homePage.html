@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src = "home_page.js" defer></script>
+    <title>Votify</title>
+
+
+    <style>
+        [data-tab-content]{
+            display: none;
+           
+        }
+        
+        .active[data-tab-content]{
+            display: block;
+        }
+
+        .tabs{
+            display: flex;
+            justify-content: space-around;
+            list-style-type: none;
+            margin:0;
+            margin-top: 100px ;
+            padding: 0;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            border-width: 15px;
+        }
+
+        body{
+            background: linear-gradient(to right, rgb(199, 210, 230), #cae0f6);
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab{
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .tab.active{
+            background-color: rgb(172, 191, 209);
+        }
+
+        .tab.hover{
+            background-color: whitesmoke;
+        }
+        
+        .votify{
+            position: absolute;
+            top: 0px;
+            left: 10px;
+            font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+            font-size: 20px;
+            font-variant-caps: all-petite-caps;
+        }
+       
+        #create{
+            position: absolute;
+            top: 210px;
+            left: 400px;
+            padding: 15px 200px;
+            font-size: 15px;
+            background-color: rgb(92, 108, 148);
+            color: white;
+            border:none;
+            border-radius: 70px;
+            cursor: pointer;
+        }
+        
+
+        .createButton{
+            color: white;
+            text-align: center;
+            padding: 10px 30px;
+            font-size: 15px;
+            background-color: black;
+        }
+
+        .createButton:hover{
+            background-color: rgb(50, 48, 57);
+        }
+
+
+        #home{
+            position: absolute;
+            top: 210px;
+            left: 550px;
+        }
+
+        #vote{
+            position: absolute;
+            top: 210px;
+            left: 550px;
+        }
+    </style>
+</head>
+<body>
+    <ul class = "tabs">
+        <li data-tab-target="#home" class="active tab">Home</li>
+        <li  data-tab-target="#vote" class="tab">Vote</li>
+        <li  data-tab-target="#create" class="tab">Create Poll</li>
+    </ul>
+
+    <div class="tabsContainer">  
+
+        <div id = "home" data-tab-content class = "active">
+            <h1>Welcome to Votify!</h1>
+            <p>-Navigate to "Vote" to vote on polls</p>
+            <p>-Navigate to "Create Poll" to create polls</p>
+
+          
+        </div>
+
+        <div id = "vote" data-tab-content>
+            <h1>Time to Vote!</h1>
+            <p>Ask the poll creator to give you the Poll ID</p>
+
+            <p><form id= "voteIDform">
+                <label for="voteID">VoteID:</label><br>
+                <input type="text" id="voteIDInput" required><br><br>
+                <button class = "createIDButton" type="submit">Submit</button>
+                </form>
+            </p>
+            
+        </div>
+
+        <div id = "create" data-tab-content>
+            <h1>Create a poll</h1>
+            <p><form id="createPollForm">
+                <label for="question">Poll Question:</label><br>
+                <input type="text" id="questionInput" required><br><br>
+            
+                <label for="expires">Expires At:</label><br>
+                <input type="datetime-local" id="expiresInput" required><br><br>
+
+                <label for="username">Username: </label><br>
+                <input type="text" id="usernameInput" required><br><br>
+            
+                <label for="password">Password: </label><br>
+                <input type="password" id="passwordInput" required><br><br>
+            
+                <button class = "createButton" type="submit">Create Poll</button>
+            </form>
+            
+            <p id="createPollMessage" style="color: rgb(0, 0, 0);"></p></p>
+         </div>
+    </div>
+
+    <div class="votify">
+        <h1>Votify</h1>
+    </div>
+
+        
+</body>
+</html>
