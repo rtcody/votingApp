@@ -15,17 +15,15 @@
             text-align: center;
             font-family:'Times New Roman', Times, serif;
             font-size: 30px;
-            
-
         }
 
-        .usernameBox{
+        /* Same styles as before */
+        .usernameBox, .emailBox{
             position: absolute;
             left: 650px;
             border-radius: 10px;
             border-width: 10px;
             border-color:lightcyan;
-
         }
         .passwordBox{
             position: absolute;
@@ -34,9 +32,6 @@
             border-radius: 10px;
             border-width: 10px;
             border-color:lightcyan;
-            
-            
-
         }
         .noLogin{
             text-align: center;
@@ -59,7 +54,6 @@
             border:none;
             border-radius: 20px;
             cursor: pointer;
-
         }
 
         .smallSignupButton{
@@ -74,7 +68,16 @@
             border:none;
             border-radius: 20px;
             cursor: pointer;
-
+        }
+        
+        .message {
+            text-align: center;
+            margin-top: 350px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
         }
     </style>
 </head>
@@ -83,22 +86,21 @@
         <h1>Welcome Back!</h1>
     </div>
 
-    <input type="text" class="usernameBox" placeholder="Enter Username: ">
-
-    <input type="password" class="passwordBox" placeholder="Enter Password: ">
+    <!-- Simple login form with direct action -->
+    <form action="/api/v1/login" method="POST" id="loginForm">
+        <input type="text" name="username" id="username" class="usernameBox" placeholder="Enter Username: " required>
+        <input type="password" name="password" id="password" class="passwordBox" placeholder="Enter Password: " required>
+        <button type="submit" class="loginButton">Login</button>
+    </form>
 
     <div class="noLogin">
         <h2>Have not made an account yet?</h2>
     </div>
 
-    <button class="loginButton">
-         <a href = "homePage.html" style="text-decoration:none; color:inherit"> Login </a>
-    </button>
+    <a href="signUpPage.html">
+        <button class="smallSignupButton">Sign up</button>
+    </a>
 
-
-    <button class ="smallSignupButton">    
-         <a href = "signUpPage.html" style="text-decoration:none; color:inherit"> Sign up </a>
-     </button>
-
+    <div id="message" class="message"></div>
 </body>
 </html>
