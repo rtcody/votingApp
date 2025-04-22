@@ -29,6 +29,13 @@ CREATE TABLE votes (
     CONSTRAINT unique_vote UNIQUE(poll_id, user_id)  -- Ensures a user can vote only once per poll
 );
 
+CREATE TABLE poll_vote_summary (
+    poll_id INT PRIMARY KEY,
+    votes_for INT DEFAULT 0,
+    votes_against INT DEFAULT 0,
+    FOREIGN KEY (poll_id) REFERENCES polls(poll_id)
+);
+
 -- Insert dummy users
 INSERT INTO users (username, email, password)
 VALUES
@@ -55,3 +62,7 @@ VALUES
     (2, 1, 0),  -- Alice disagrees
     (2, 2, 1),  -- Bob agrees
     (2, 3, 0);  -- Charlie disagrees
+
+INSERT INTO poll_vote_summary (poll_id, votes_for, votes_against) VALUES
+(1, 10, 3),
+(2, 4, 9); 

@@ -18,7 +18,7 @@ def get_db_connection():
     )
     return conn
 
-@app.route('/users')
+@app.route('/api/v1/users')
 def get_users():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -28,7 +28,7 @@ def get_users():
     conn.close()  
     return {'users': users}
 
-@app.route('/polls')
+@app.route('/api/v1/polls')
 def get_polls():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -39,6 +39,29 @@ def get_polls():
 
     polls_list = [p[0] for p in polls]
     return jsonify(polls_list)
+
+@app.route('/api/v1/votes_summary', methods=['GET'])
+def get_vote_summary():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT poll_id, votes_for, votes_against FROM poll_vote_summary')
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    summary = [
+        {
+            'poll_id': row[0],
+            'votes_for': row[1],
+            'votes_against': row[2]
+        }
+        for row in rows
+    ]
+
+    return jsonify(summary)
+
 
 
 @app.route('/api/v1/signup', methods=['POST'])
