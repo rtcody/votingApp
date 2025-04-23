@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import psycopg2
 
 app = Flask(__name__)  
+CORS(app) 
 
 @app.route('/')
 def blank():   
@@ -153,41 +155,46 @@ def login():
 def create_poll():
     data = request.get_json()
 
-    # Extract the poll prompt (question), created_by, and expires_at from the request
     question = data.get('question')
-    created_by = data.get('created_by')
+    username = data.get('username')
+    password = data.get('password')
     expires_at = data.get('expires_at')
 
-    if not question or not created_by:
-        return jsonify({"message": "Question and created_by are required!"}), 400
+    if not question or not username or not password:
+        return jsonify({"message": "Question, username, and password are required!"}), 400
 
-    # Connect to the database
     conn = get_db_connection()
     cur = conn.cursor()
 
     try:
-        # Insert the new poll into the polls table
+        # Verify username and password (plaintext)
+        cur.execute("SELECT user_id FROM users WHERE username = %s AND password = %s;", (username, password))
+        result = cur.fetchone()
+
+        if not result:
+            return jsonify({"message": "Invalid username or password."}), 401
+
+        user_id = result[0]
+
+        # Create the poll with the verified user_id
         cur.execute('''
             INSERT INTO polls (question, created_by, expires_at)
             VALUES (%s, %s, %s) RETURNING poll_id;
-        ''', (question, created_by, expires_at))
+        ''', (question, user_id, expires_at))
 
-        # Fetch the poll_id of the newly inserted poll
         poll_id = cur.fetchone()[0]
-
-        # Commit the transaction
         conn.commit()
 
-        # Respond with success message including the poll_id
         return jsonify({"message": "Poll created successfully!", "poll_id": poll_id}), 201
 
     except Exception as e:
         conn.rollback()
-        return jsonify({"message": str(e)}), 500
+        return jsonify({"message": f"An error occurred: {str(e)}"}), 500
 
     finally:
         cur.close()
         conn.close()
+
 
 
 
