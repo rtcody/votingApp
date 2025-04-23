@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src = "home_page.js" defer></script>
+    <script src="home_page.js" defer></script>
     <title>Votify</title>
 
     <style>
@@ -125,6 +125,55 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
+
+        /* New styles for voting buttons */
+        .vote-buttons {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .vote-button {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .upvote {
+            color: #4CAF50;
+        }
+
+        .downvote {
+            color: #F44336;
+        }
+
+        .vote-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .vote-count {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .vote-summary {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .vote-message {
+            color: #4CAF50;
+            margin-top: 5px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -172,150 +221,5 @@
     <div class="votify">
         <h1>Votify</h1>
     </div>
-
-    <script>
-        // Tab functionality
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('[data-tab-target]');
-            const tabContents = document.querySelectorAll('[data-tab-content]');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const target = document.querySelector(tab.dataset.tabTarget);
-                    
-                    tabContents.forEach(tabContent => {
-                        tabContent.classList.remove('active');
-                    });
-                    
-                    tabs.forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    
-                    tab.classList.add('active');
-                    target.classList.add('active');
-
-                    // Load polls when clicking on the Vote tab
-                    if (tab.dataset.tabTarget === '#vote') {
-                        loadPolls();
-                    }
-                });
-            });
-            
-            // Set up form submission
-            const createPollForm = document.getElementById('createPollForm');
-            if (createPollForm) {
-                createPollForm.addEventListener('submit', createPoll);
-            }
-            
-            // Add option button functionality
-            const addOptionBtn = document.getElementById('addOptionBtn');
-            if (addOptionBtn) {
-                addOptionBtn.addEventListener('click', addOption);
-            }
-
-            // Load polls initially if on Vote tab
-            if (document.querySelector('#vote.active')) {
-                loadPolls();
-            }
-        });
-        
-        function loadPolls() {
-            fetch('http://127.0.0.1:5000/api/v1/polls')
-                .then(response => response.json())
-                .then(data => {
-                    // Handle the list of polls
-                    const pollsListDiv = document.getElementById('pollsList');
-                    pollsListDiv.innerHTML = ''; // Clear previous content
-                    
-                    if (data.length > 0) {
-                        data.forEach(poll => {
-                            const pollElement = document.createElement('div');
-                            pollElement.className = 'poll-item';
-                            
-                            // Check if poll is a string or object and display accordingly
-                            if (typeof poll === 'object') {
-                                pollElement.innerHTML = `<h3>${poll.question}</h3>`;
-                                
-                                // If poll has options, display them
-                                if (poll.options && poll.options.length > 0) {
-                                    const optionsList = document.createElement('ul');
-                                    poll.options.forEach(option => {
-                                        const optionItem = document.createElement('li');
-                                        optionItem.textContent = option;
-                                        optionsList.appendChild(optionItem);
-                                    });
-                                    pollElement.appendChild(optionsList);
-                                }
-                            } else {
-                                pollElement.innerHTML = `<h3>${poll}</h3>`;
-                            }
-                            
-                            pollsListDiv.appendChild(pollElement);
-                        });
-                    } else {
-                        pollsListDiv.textContent = 'No polls available at the moment.';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading polls:', error);
-                    const pollsListDiv = document.getElementById('pollsList');
-                    pollsListDiv.textContent = `Error fetching polls: ${error.message}`;
-                });
-        }
-        
-        function createPoll(event) {
-            event.preventDefault();
-            
-            const questionInput = document.getElementById('questionInput');
-            const expiresInput = document.getElementById('expiresInput');
-            const usernameInput = document.getElementById('usernameInput');
-            const passwordInput = document.getElementById('passwordInput');
-            const optionInputs = document.querySelectorAll('.optionInput');
-            const message = document.getElementById('createPollMessage');
-            
-            // Validate all inputs are filled
-            if (!questionInput.value || !expiresInput.value || !usernameInput.value || !passwordInput.value) {
-                message.textContent = '❌ Please fill in all required fields.';
-                return;
-            }
-            
-            
-            // Create poll data object
-            const pollData = {
-                question: questionInput.value,
-                expires_at: expiresInput.value,
-                username: usernameInput.value,
-                password: passwordInput.value,
-                options: options
-            };
-            
-            // Send data to API
-            fetch('http://127.0.0.1:5000/api/v1/create_poll', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(pollData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.poll_id) {
-                    message.textContent = `✅ Poll created successfully! Poll ID: ${data.poll_id}`;
-                    createPollForm.reset();
-                    
-                    // Switch to vote tab after successful creation
-                    setTimeout(() => {
-                        document.querySelector('[data-tab-target="#vote"]').click();
-                    }, 2000);
-                } else {
-                    message.textContent = `❌ Error: ${data.message || 'Failed to create poll'}`;
-                }
-            })
-            .catch(error => {
-                console.error('Error creating poll:', error);
-                message.textContent = `❌ Error creating poll: ${error.message}`;
-            });
-        }
-    </script>
 </body>
 </html>
