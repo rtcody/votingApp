@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src = "home_page.js" defer></script>
     <title>Votify</title>
 
     <style>
@@ -73,6 +74,9 @@
             padding: 10px 30px;
             font-size: 15px;
             background-color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         .createButton:hover {
@@ -89,6 +93,37 @@
             position: absolute;
             top: 210px;
             left: 550px;
+        }
+
+        .poll-item {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .options-container {
+            margin-top: 20px;
+        }
+
+        .option-input {
+            margin-bottom: 10px;
+        }
+
+        #createPollForm {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #createPollForm input[type="text"],
+        #createPollForm input[type="datetime-local"],
+        #createPollForm input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
@@ -158,19 +193,30 @@
                     
                     tab.classList.add('active');
                     target.classList.add('active');
+
+                    // Load polls when clicking on the Vote tab
+                    if (tab.dataset.tabTarget === '#vote') {
+                        loadPolls();
+                    }
                 });
             });
             
-            // Fetch polls from the API
-            loadPolls();
-            
             // Set up form submission
             const createPollForm = document.getElementById('createPollForm');
-            createPollForm.addEventListener('submit', createPoll);
+            if (createPollForm) {
+                createPollForm.addEventListener('submit', createPoll);
+            }
             
             // Add option button functionality
             const addOptionBtn = document.getElementById('addOptionBtn');
-            addOptionBtn.addEventListener('click', addOption);
+            if (addOptionBtn) {
+                addOptionBtn.addEventListener('click', addOption);
+            }
+
+            // Load polls initially if on Vote tab
+            if (document.querySelector('#vote.active')) {
+                loadPolls();
+            }
         });
         
         function loadPolls() {
@@ -184,7 +230,26 @@
                     if (data.length > 0) {
                         data.forEach(poll => {
                             const pollElement = document.createElement('div');
-                            pollElement.textContent = poll; // Display the poll question
+                            pollElement.className = 'poll-item';
+                            
+                            // Check if poll is a string or object and display accordingly
+                            if (typeof poll === 'object') {
+                                pollElement.innerHTML = `<h3>${poll.question}</h3>`;
+                                
+                                // If poll has options, display them
+                                if (poll.options && poll.options.length > 0) {
+                                    const optionsList = document.createElement('ul');
+                                    poll.options.forEach(option => {
+                                        const optionItem = document.createElement('li');
+                                        optionItem.textContent = option;
+                                        optionsList.appendChild(optionItem);
+                                    });
+                                    pollElement.appendChild(optionsList);
+                                }
+                            } else {
+                                pollElement.innerHTML = `<h3>${poll}</h3>`;
+                            }
+                            
                             pollsListDiv.appendChild(pollElement);
                         });
                     } else {
@@ -192,6 +257,7 @@
                     }
                 })
                 .catch(error => {
+                    console.error('Error loading polls:', error);
                     const pollsListDiv = document.getElementById('pollsList');
                     pollsListDiv.textContent = `Error fetching polls: ${error.message}`;
                 });
@@ -209,9 +275,10 @@
             
             // Validate all inputs are filled
             if (!questionInput.value || !expiresInput.value || !usernameInput.value || !passwordInput.value) {
-                message.textContent = 'Please fill in all required fields.';
+                message.textContent = '❌ Please fill in all required fields.';
                 return;
             }
+            
             
             // Create poll data object
             const pollData = {
@@ -223,31 +290,30 @@
             };
             
             // Send data to API
-            fetch('http://127.0.0.1:5000/api/v1/polls', {
+            fetch('http://127.0.0.1:5000/api/v1/create_poll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(pollData)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to create poll');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                message.textContent = 'Poll created successfully!';
-                createPollForm.reset();
-                
-                // Refresh polls list
-                loadPolls();
-                
-                // Switch to vote tab after successful creation
-                document.querySelector('[data-tab-target="#vote"]').click();
+                if (data.poll_id) {
+                    message.textContent = `✅ Poll created successfully! Poll ID: ${data.poll_id}`;
+                    createPollForm.reset();
+                    
+                    // Switch to vote tab after successful creation
+                    setTimeout(() => {
+                        document.querySelector('[data-tab-target="#vote"]').click();
+                    }, 2000);
+                } else {
+                    message.textContent = `❌ Error: ${data.message || 'Failed to create poll'}`;
+                }
             })
             .catch(error => {
-                message.textContent = `Error creating poll: ${error.message}`;
+                console.error('Error creating poll:', error);
+                message.textContent = `❌ Error creating poll: ${error.message}`;
             });
         }
     </script>
