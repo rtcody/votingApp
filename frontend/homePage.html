@@ -41,10 +41,6 @@
             background-color: rgb(172, 191, 209);
         }
 
-        .tab.hover {
-            background-color: whitesmoke;
-        }
-
         .votify {
             position: absolute;
             top: 0px;
@@ -73,22 +69,114 @@
             padding: 10px 30px;
             font-size: 15px;
             background-color: black;
+            border-radius: 5px;
+            cursor: pointer;
         }
 
         .createButton:hover {
             background-color: rgb(50, 48, 57);
         }
 
-        #home {
-            position: absolute;
-            top: 210px;
-            left: 550px;
+        .poll-box {
+            background-color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
-        #vote {
-            position: absolute;
-            top: 210px;
-            left: 550px;
+        .poll-question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .vote-form {
+            margin-top: 15px;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .vote-form input {
+            margin-bottom: 10px;
+        }
+
+        .agree, .disagree {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .agree {
+            background-color: #4CAF50; /* Green */
+        }
+
+        .disagree {
+            background-color: #F44336; /* Red */
+        }
+
+        .agree:hover {
+            background-color: #3e8e41; /* Darker green */
+        }
+
+        .disagree:hover {
+            background-color: #d32f2f; /* Darker red */
+        }
+
+        .vote-status {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+
+        #pollsList {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tabsContainer {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="password"], input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -110,7 +198,7 @@
         <div id="vote" data-tab-content>
             <h1>Time to Vote!</h1>
             <p>Here are the available polls:</p>
-            <div id="pollsList"></div> <!-- Polls will be displayed here -->
+            <div id="pollsList"></div>
         </div>
 
         <div id="create" data-tab-content>
@@ -139,7 +227,6 @@
     </div>
 
     <script>
-        // Tab functionality
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('[data-tab-target]');
             const tabContents = document.querySelectorAll('[data-tab-content]');
@@ -158,96 +245,208 @@
                     
                     tab.classList.add('active');
                     target.classList.add('active');
+
+                    if (tab.dataset.tabTarget === "#vote") {
+                        loadPolls();
+                    }
                 });
             });
+
+            document.getElementById('createPollForm').addEventListener('submit', createPoll);
             
-            // Fetch polls from the API
-            loadPolls();
-            
-            // Set up form submission
-            const createPollForm = document.getElementById('createPollForm');
-            createPollForm.addEventListener('submit', createPoll);
-            
-            // Add option button functionality
-            const addOptionBtn = document.getElementById('addOptionBtn');
-            addOptionBtn.addEventListener('click', addOption);
+            // Load polls initially if we're on the vote tab
+            if (document.querySelector('[data-tab-target="#vote"]').classList.contains('active')) {
+                loadPolls();
+            }
         });
-        
+
         function loadPolls() {
+            const pollsList = document.getElementById('pollsList');
+            pollsList.innerHTML = '<p>Loading polls...</p>';
+            
             fetch('http://127.0.0.1:5000/api/v1/polls')
-                .then(response => response.json())
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to fetch polls');
+                    return res.json();
+                })
                 .then(data => {
-                    // Handle the list of polls
-                    const pollsListDiv = document.getElementById('pollsList');
-                    pollsListDiv.innerHTML = ''; // Clear previous content
-                    
-                    if (data.length > 0) {
-                        data.forEach(poll => {
-                            const pollElement = document.createElement('div');
-                            pollElement.textContent = poll; // Display the poll question
-                            pollsListDiv.appendChild(pollElement);
-                        });
-                    } else {
-                        pollsListDiv.textContent = 'No polls available at the moment.';
+                    pollsList.innerHTML = '';
+
+                    if (data.length === 0) {
+                        pollsList.innerHTML = '<p>No polls available right now.</p>';
+                        return;
                     }
+
+                    // Based on the backend, data is an array of objects with 'question' property
+                    data.forEach((poll, index) => {
+                        const pollDiv = document.createElement('div');
+                        pollDiv.className = 'poll-box';
+                        // Store poll ID (if available) or use index as a fallback
+                        const pollId = poll.poll_id || index + 1;
+                        pollDiv.id = `poll-${pollId}`;
+
+                        const question = document.createElement('div');
+                        question.className = 'poll-question';
+                        question.textContent = poll.question;
+
+                        const voteForm = document.createElement('div');
+                        voteForm.className = 'vote-form';
+                        voteForm.innerHTML = `
+                            <h3>Cast your vote:</h3>
+                            <input type="text" placeholder="Username" class="username-input" required>
+                            <input type="password" placeholder="Password" class="password-input" required>
+                            <div class="vote-buttons">
+                                <button class="agree" data-vote="agree">👍 Agree</button>
+                                <button class="disagree" data-vote="disagree">👎 Disagree</button>
+                            </div>
+                            <div class="vote-status"></div>
+                        `;
+
+                        // Add event listeners for vote buttons
+                        const agreeBtn = voteForm.querySelector('.agree');
+                        const disagreeBtn = voteForm.querySelector('.disagree');
+
+                        agreeBtn.addEventListener('click', () => {
+                            submitVote(pollId, 'agree', voteForm);
+                        });
+
+                        disagreeBtn.addEventListener('click', () => {
+                            submitVote(pollId, 'disagree', voteForm);
+                        });
+
+                        pollDiv.appendChild(question);
+                        pollDiv.appendChild(voteForm);
+                        
+                        pollsList.appendChild(pollDiv);
+                    });
                 })
                 .catch(error => {
-                    const pollsListDiv = document.getElementById('pollsList');
-                    pollsListDiv.textContent = `Error fetching polls: ${error.message}`;
+                    pollsList.innerHTML = `<p>Error loading polls: ${error.message}</p>`;
                 });
         }
-        
-        function createPoll(event) {
-            event.preventDefault();
+
+        function submitVote(pollId, voteType, formElement) {
+            const username = formElement.querySelector('.username-input').value;
+            const password = formElement.querySelector('.password-input').value;
+            const statusElement = formElement.querySelector('.vote-status');
             
-            const questionInput = document.getElementById('questionInput');
-            const expiresInput = document.getElementById('expiresInput');
-            const usernameInput = document.getElementById('usernameInput');
-            const passwordInput = document.getElementById('passwordInput');
-            const optionInputs = document.querySelectorAll('.optionInput');
-            const message = document.getElementById('createPollMessage');
-            
-            // Validate all inputs are filled
-            if (!questionInput.value || !expiresInput.value || !usernameInput.value || !passwordInput.value) {
-                message.textContent = 'Please fill in all required fields.';
+            if (!username || !password) {
+                statusElement.textContent = 'Please enter your username and password';
+                statusElement.className = 'vote-status error';
                 return;
             }
             
-            // Create poll data object
-            const pollData = {
-                question: questionInput.value,
-                expires_at: expiresInput.value,
-                username: usernameInput.value,
-                password: passwordInput.value,
-                options: options
+            // Disable buttons while submitting
+            const buttons = formElement.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            statusElement.textContent = 'Submitting vote...';
+            statusElement.className = 'vote-status';
+            
+            const voteData = {
+                username: username,
+                password: password,
+                poll_id: pollId,
+                vote: voteType
             };
             
-            // Send data to API
-            fetch('http://127.0.0.1:5000/api/v1/polls', {
+            fetch('http://127.0.0.1:5000/api/v1/record_vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(voteData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Vote failed');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                statusElement.textContent = data.message || 'Vote recorded successfully!';
+                statusElement.className = 'vote-status success';
+                
+                // Update form to show vote has been cast
+                formElement.querySelector('.username-input').disabled = true;
+                formElement.querySelector('.password-input').disabled = true;
+                buttons.forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.opacity = 0.5;
+                });
+                
+                if (voteType === 'agree') {
+                    formElement.querySelector('.agree').style.opacity = 1;
+                } else {
+                    formElement.querySelector('.disagree').style.opacity = 1;
+                }
+            })
+            .catch(error => {
+                statusElement.textContent = error.message;
+                statusElement.className = 'vote-status error';
+                // Re-enable buttons on error
+                buttons.forEach(btn => btn.disabled = false);
+            });
+        }
+
+        function createPoll(event) {
+            event.preventDefault();
+
+            const questionInput = document.getElementById('questionInput').value;
+            const expiresInput = document.getElementById('expiresInput').value;
+            const usernameInput = document.getElementById('usernameInput').value;
+            const passwordInput = document.getElementById('passwordInput').value;
+            const message = document.getElementById('createPollMessage');
+
+            if (!questionInput || !expiresInput || !usernameInput || !passwordInput) {
+                message.style.color = 'red';
+                message.textContent = 'All fields are required!';
+                return;
+            }
+
+            const createButton = document.querySelector('.createButton');
+            createButton.disabled = true;
+            createButton.textContent = 'Creating...';
+
+            const pollData = {
+                question: questionInput,
+                expires_at: expiresInput,
+                username: usernameInput,
+                password: passwordInput
+            };
+
+            fetch('http://127.0.0.1:5000/api/v1/create_poll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(pollData)
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to create poll');
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(data => {
+                        throw new Error(data.message || 'Failed to create poll');
+                    });
                 }
-                return response.json();
+                return res.json();
             })
             .then(data => {
-                message.textContent = 'Poll created successfully!';
-                createPollForm.reset();
-                
-                // Refresh polls list
-                loadPolls();
-                
-                // Switch to vote tab after successful creation
-                document.querySelector('[data-tab-target="#vote"]').click();
+                message.style.color = 'green';
+                message.textContent = data.message || 'Poll created successfully!';
+                document.getElementById('createPollForm').reset();
+                setTimeout(() => {
+                    document.querySelector('[data-tab-target="#vote"]').click();
+                }, 1000);
             })
-            .catch(error => {
-                message.textContent = `Error creating poll: ${error.message}`;
+            .catch(err => {
+                message.style.color = 'red';
+                message.textContent = err.message;
+            })
+            .finally(() => {
+                createButton.disabled = false;
+                createButton.textContent = 'Create Poll';
             });
         }
     </script>

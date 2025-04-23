@@ -195,6 +195,67 @@ def create_poll():
         cur.close()
         conn.close()
 
+@app.route('/api/v1/record_vote', methods=['POST'])
+def record_vote():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    poll_id = data.get('poll_id')
+    vote = data.get('vote')  # 'agree' or 'disagree'
+
+    if not username or not password or poll_id is None or vote not in ['agree', 'disagree']:
+        return jsonify({"message": "Missing or invalid fields"}), 400
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        # Authenticate user
+        cur.execute("SELECT user_id FROM users WHERE username = %s AND password = %s", (username, password))
+        result = cur.fetchone()
+        if not result:
+            return jsonify({"message": "Invalid username or password"}), 401
+
+        user_id = result[0]
+        vote_val = 1 if vote == 'agree' else 0
+
+        # Insert vote into 'votes' table
+        cur.execute("""
+            INSERT INTO votes (poll_id, user_id, vote)
+            VALUES (%s, %s, %s)
+        """, (poll_id, user_id, vote_val))
+
+        # Update or insert into 'poll_vote_summary'
+        if vote_val == 1:
+            cur.execute("""
+                INSERT INTO poll_vote_summary (poll_id, votes_for, votes_against)
+                VALUES (%s, 1, 0)
+                ON CONFLICT (poll_id) DO UPDATE
+                SET votes_for = poll_vote_summary.votes_for + 1
+            """, (poll_id,))
+        else:
+            cur.execute("""
+                INSERT INTO poll_vote_summary (poll_id, votes_for, votes_against)
+                VALUES (%s, 0, 1)
+                ON CONFLICT (poll_id) DO UPDATE
+                SET votes_against = poll_vote_summary.votes_against + 1
+            """, (poll_id,))
+
+        conn.commit()
+        return jsonify({"message": "Vote recorded successfully"}), 201
+
+    except psycopg2.errors.UniqueViolation:
+        conn.rollback()
+        return jsonify({"message": "You have already voted on this poll"}), 409
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
+
+    finally:
+        cur.close()
+        conn.close()
+
 
 
 
