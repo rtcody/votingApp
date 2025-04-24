@@ -1,0 +1,76 @@
+
+body { /*background image */
+background: url(loginSignUpBG.jpg);
+background-size: cover;
+margin: 0;
+}
+
+.container {  /*font and centering for the welcome msg*/
+text-align: center;
+font-family: 'Times New Roman', Times, serif;
+font-size: 30px;
+}
+
+.usernameBox { /* positioning for the user box and color*/
+position: absolute;
+left: 650px;
+top: 150px;
+border-radius: 10px;
+border-width: 10px;
+border-color: lightcyan;
+}
+
+.emailBox { /* positioning for the email box and color*/
+position: absolute;
+left: 650px;
+top: 200px;
+border-radius: 10px;
+border-width: 10px;
+border-color: lightcyan;
+}
+
+.passwordBox { /* positioning for the password box and color*/
+position: absolute;
+left: 650px;
+top: 250px;
+border-radius: 10px;
+border-width: 10px;
+border-color: lightcyan;
+}
+
+.haveAccount { /*have acc msg*/
+text-align: center;
+font-family: 'Times New Roman', Times, serif;
+font-size: 10px;
+position: absolute;
+left: 650px;
+top: 500px;
+}
+
+.signupButton { /*sign up button style */
+text-align: center;
+position: absolute;
+left: 680px;
+top: 350px;
+padding: 15px 30px;
+font-size: 15px;
+background-color: black;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+}
+
+.smallLoginButton { /*login button style */
+text-align: center;
+position: absolute;
+left: 690px;
+top: 550px;
+padding: 7px 15px;
+font-size: 15px;
+background-color: black;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+}

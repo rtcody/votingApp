@@ -1,7 +1,10 @@
+
+//js for allowing switching of tabs 
 const tabs = document.querySelectorAll('[data-tab-target]')
 const tabContents = document.querySelectorAll('[data-tab-content]')
 tabs.forEach(tab => 
 {
+    //listen for a click event to change the active tab
     tab.addEventListener('click', () =>
     {
         const target = document.querySelector(tab.dataset.tabTarget)
@@ -13,6 +16,7 @@ tabs.forEach(tab =>
         })
         tab.classList.add('active')
         target.classList.add('active')
+        //changes active tab and remove prev active tab
     })
 }
 )

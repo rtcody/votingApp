@@ -5,115 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <style>
-        body {
-            background: url(loginSignUpBG.jpg);
-            background-size: cover;
-            margin: 0;
-        }
-        
-        .container {
-            text-align: center;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 30px;
-        }
-        
-        .usernameBox {
-            position: absolute;
-            left: 650px;
-            top: 150px;
-            border-radius: 10px;
-            border-width: 10px;
-            border-color: lightcyan;
-        }
-        
-        .emailBox {
-            position: absolute;
-            left: 650px;
-            top: 200px;
-            border-radius: 10px;
-            border-width: 10px;
-            border-color: lightcyan;
-        }
-        
-        .passwordBox {
-            position: absolute;
-            left: 650px;
-            top: 250px;
-            border-radius: 10px;
-            border-width: 10px;
-            border-color: lightcyan;
-        }
-        
-        .haveAccount {
-            text-align: center;
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 10px;
-            position: absolute;
-            left: 650px;
-            top: 500px;
-        }
-        
-        .signupButton {
-            text-align: center;
-            position: absolute;
-            left: 680px;
-            top: 350px;
-            padding: 15px 30px;
-            font-size: 15px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        
-        .smallLoginButton {
-            text-align: center;
-            position: absolute;
-            left: 690px;
-            top: 550px;
-            padding: 7px 15px;
-            font-size: 15px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        
-        .message {
-            text-align: center;
-            margin-top: 400px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="signUpPageStyle.css">
+    
 </head>
 <body>
     <div class="container">
         <h1>Create Account</h1>
     </div>
-
+    <!-- sign up form box id w/ its inputs -->
     <form id="signupForm">
         <input type="text" name="username" id="username" class="usernameBox" placeholder="Choose Username: " required>
         <input type="email" name="email" id="email" class="emailBox" placeholder="Enter Email: " required>
         <input type="password" name="password" id="password" class="passwordBox" placeholder="Create Password: " required>
         <button type="submit" class="signupButton">Sign Up</button>
     </form>
-
+    <!--if user has an account allow them to go back to login page-->
     <div class="haveAccount">
         <h2>Already have an account?</h2>
     </div>
-
-    <a href="index.html">
+    <!--redirect to login page-->
+    <a href="loginPage.html"> 
         <button class="smallLoginButton">Login</button>
     </a>
 
-    <div id="message" class="message"></div>
+    
 
     <script>
         document.getElementById('signupForm').addEventListener('submit', function(e) {
