@@ -1,0 +1,170 @@
+
+[data-tab-content] {
+    display: none; /* display none of the tabs */ 
+}
+
+.active[data-tab-content] {
+    display: block; /* display active tab*/ 
+}
+
+.tabs { /*tab styling */
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    margin: 0;
+    margin-top: 100px;
+    padding: 0;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-width: 15px;
+}
+
+body { /*gradient background design*/
+    background: linear-gradient(to right, rgb(199, 210, 230), #cae0f6);
+    margin: 0;
+    padding: 0;
+}
+
+.tab { /* turns cursor into pointer when over tab for easy UI experience*/
+    cursor: pointer;
+    padding: 10px;
+}
+
+.tab.active { /*allows you to know what tab youre on*/
+    background-color: rgb(172, 191, 209);
+}
+
+.tab.hover {
+    /*cannot get this hover to work RIP*/
+    background-color: rgb(209, 87, 87);
+}
+
+.votify { /*votify msg on top left*/
+    position: absolute;
+    top: 0px;
+    left: 10px;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    font-size: 20px;
+    font-variant-caps: all-petite-caps;
+}
+
+#create { /*style of the create a poll tab*/
+    position: absolute;
+    top: 210px;
+    left: 400px;
+    padding: 15px 200px;
+    font-size: 15px;
+    background-color: rgb(92, 108, 148);
+    color: white;
+    border: none;
+    border-radius: 70px;
+    cursor: pointer;
+}
+
+.createButton { /*create poll button style*/
+    color: white;
+    text-align: center;
+    padding: 10px 30px;
+    font-size: 15px;
+    background-color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.createButton:hover { /*changes color when you hover over the create poll button for better UI*/
+    background-color: rgb(50, 48, 57);
+}
+
+#home {  /*positon of the home tab content*/
+    position: absolute;
+    top: 210px;
+    left: 550px;
+}
+
+#vote {   /*positon of the vote tab content*/
+    position: absolute;
+    top: 2100px;
+    left: 550px;
+}
+
+.poll-item { 
+    background-color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.options-container {
+    margin-top: 20px;
+}
+
+.option-input {
+    margin-bottom: 10px;
+}
+
+#createPollForm { /*poll form style*/
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/*poll form input styles*/
+#createPollForm input[type="text"],
+#createPollForm input[type="datetime-local"],
+#createPollForm input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* New styles for voting buttons */
+.vote-buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.vote-button { 
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.upvote {
+    color: #4CAF50;
+}
+
+.downvote {
+    color: #F44336;
+}
+
+.vote-button:hover {
+    background-color: #e0e0e0;
+}
+
+.vote-count {
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.vote-summary {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.vote-message {
+    color: #4CAF50;
+    margin-top: 5px;
+    font-size: 14px;
+}

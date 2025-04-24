@@ -3,61 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>Login</title>
-  <style>
-    body {
-      background: url(loginSignUpBG.jpg);
-      background-size: cover;
-      margin: 0;
-    }
-    .container {
-      text-align: center;
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 30px;
-    }
-    .usernameBox, .passwordBox {
-      position: absolute;
-      left: 650px;
-      border-radius: 10px;
-      border-width: 10px;
-      border-color: lightcyan;
-    }
-    .passwordBox {
-      top: 200px;
-    }
-    .noLogin {
-      text-align: center;
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 10px;
-      position: absolute;
-      left: 630px;
-      top: 500px;
-    }
-    .loginButton {
-      position: absolute;
-      left: 680px;
-      top: 300px;
-      padding: 15px 30px;
-      font-size: 15px;
-      background-color: black;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-    .smallSignupButton {
-      position: absolute;
-      left: 690px;
-      top: 550px;
-      padding: 7px 15px;
-      font-size: 15px;
-      background-color: black;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="loginPageStyle.css">
 </head>
 <body>
   <div class="container">
@@ -65,11 +13,13 @@
   </div>
 
   <div>
+    <!--input boxes-->
     <input type="text" id="username" class="usernameBox" placeholder="Enter Username:" />
     <input type="password" id="password" class="passwordBox" placeholder="Enter Password:" />
     <button id="loginBtn" class="loginButton">Login</button>
   </div>
 
+  <!--no acc made yet use sing up button to go to sign up-->
   <div class="noLogin">
     <h2>Have not made an account yet?</h2>
   </div>

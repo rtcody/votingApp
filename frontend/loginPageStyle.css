@@ -1,0 +1,58 @@
+body {  /* background app*/ 
+background: url(loginSignUpBG.jpg);
+background-size: cover;
+margin: 0;
+}
+
+.container { /*container for the welcome msg*/ 
+text-align: center;
+font-family: 'Times New Roman', Times, serif;
+font-size: 30px;
+}
+
+.usernameBox, .passwordBox { /* password and username box style  */
+position: absolute;
+left: 650px;
+border-radius: 10px;
+border-width: 10px;
+border-color: lightcyan;
+}
+
+.passwordBox { /*positioning*/
+top: 200px;
+}
+
+.noLogin { /*no login msg*/
+text-align: center;
+font-family: 'Times New Roman', Times, serif;
+font-size: 10px;
+position: absolute;
+left: 630px;
+top: 500px;
+}
+
+.loginButton { /*login button style*/
+position: absolute;
+left: 680px;
+top: 300px;
+padding: 15px 30px;
+font-size: 15px;
+background-color: black;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+}
+
+.smallSignupButton {/*sign up button style*/
+position: absolute;
+left: 690px;
+top: 550px;
+padding: 7px 15px;
+font-size: 15px;
+background-color: black;
+color: white;
+border: none;
+border-radius: 20px;
+cursor: pointer;
+}
