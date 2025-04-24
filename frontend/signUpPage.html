@@ -6,28 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="signUpPageStyle.css">
-    
 </head>
 <body>
     <div class="container">
         <h1>Create Account</h1>
     </div>
-    <!-- sign up form box id w/ its inputs -->
+
     <form id="signupForm">
         <input type="text" name="username" id="username" class="usernameBox" placeholder="Choose Username: " required>
         <input type="email" name="email" id="email" class="emailBox" placeholder="Enter Email: " required>
         <input type="password" name="password" id="password" class="passwordBox" placeholder="Create Password: " required>
         <button type="submit" class="signupButton">Sign Up</button>
     </form>
-    <!--if user has an account allow them to go back to login page-->
+
     <div class="haveAccount">
         <h2>Already have an account?</h2>
     </div>
 
-    <a href="loginPage.html"> 
+    <a href="loginPage.html">
         <button class="smallLoginButton">Login</button>
     </a>
-<
+
     <div id="message" class="message"></div>
 
     <script>
