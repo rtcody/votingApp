@@ -1,5 +1,5 @@
 # votingApp
-Class Project for CptS 355
+Class Project for CptS 322
 
 
 ### Frontend setup:
